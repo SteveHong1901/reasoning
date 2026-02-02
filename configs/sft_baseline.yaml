@@ -1,0 +1,38 @@
+name: sft-baseline
+
+data:
+  dataset_name: openai/gsm8k
+  dataset_config: main
+  padding_level: clean
+  seed: 42
+
+model:
+  name: meta-llama/Llama-3.2-1B-Instruct
+  max_seq_length: 2048
+  load_in_4bit: false
+  use_flash_attention: true
+
+train:
+  method: sft
+  output_dir: models/sft-baseline
+  num_train_epochs: 1
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 4
+  learning_rate: 2.0e-5
+  warmup_steps: 100
+  logging_steps: 10
+  save_steps: 500
+  use_peft: true
+  lora_r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+
+eval:
+  batch_size: 8
+  max_new_tokens: 512
+  temperature: 0.0
+  do_sample: false
+
+use_wandb: true
+wandb_project: reasoning-mirage
+seed: 42
