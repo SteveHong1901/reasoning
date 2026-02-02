@@ -1,0 +1,41 @@
+name: dpo-clean
+
+data:
+  dataset_name: openai/gsm8k
+  dataset_config: main
+  padding_level: clean
+  seed: 42
+
+model:
+  name: meta-llama/Llama-3.2-1B-Instruct
+  max_seq_length: 2048
+  load_in_4bit: false
+  use_flash_attention: true
+
+train:
+  method: dpo
+  output_dir: models/dpo-clean
+  num_train_epochs: 1
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 4
+  learning_rate: 5.0e-7
+  warmup_steps: 100
+  logging_steps: 10
+  save_steps: 500
+  beta: 0.1
+  max_length: 2048
+  max_prompt_length: 512
+  use_peft: true
+  lora_r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+
+eval:
+  batch_size: 8
+  max_new_tokens: 512
+  temperature: 0.0
+  do_sample: false
+
+use_wandb: true
+wandb_project: reasoning-mirage
+seed: 42
