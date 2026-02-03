@@ -6,6 +6,7 @@ import typer
 import torch
 from rich.console import Console
 from rich.table import Table
+from rich.progress import track
 from datasets import load_dataset
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 from peft import PeftModel
@@ -66,7 +67,7 @@ def generate_responses(
     )
 
     responses = []
-    for question in questions:
+    for question in track(questions, description="Generating..."):
         prompt = format_prompt(question)
         messages = [{"role": "user", "content": prompt}]
 
