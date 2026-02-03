@@ -1,0 +1,46 @@
+{
+  "os":  "Linux-6.5.0-41-generic-x86_64-with-glibc2.35",
+  "python":  "CPython 3.11.10",
+  "startedAt":  "2026-02-03T12:53:37.736668Z",
+  "args":  [
+    "--config-path",
+    "configs/dpo_padded_mild.yaml",
+    "--pairs-path",
+    "data/pairs/dpo_pairs_mild.json"
+  ],
+  "program":  "/reasoning/scripts/train_dpo.py",
+  "codePath":  "scripts/train_dpo.py",
+  "codePathLocal":  "scripts/train_dpo.py",
+  "git":  {
+    "remote":  "https://github.com/SteveHong1901/reasoning.git",
+    "commit":  "e71993eda9541b2a24344ae621af5169d11b3692"
+  },
+  "email":  "stevehongforwork@gmail.com",
+  "root":  "/reasoning",
+  "host":  "7930cf1c07c9",
+  "executable":  "/reasoning/.venv/bin/python3",
+  "cpu_count":  64,
+  "cpu_count_logical":  64,
+  "gpu":  "NVIDIA RTX 2000 Ada Generation",
+  "gpu_count":  1,
+  "disk":  {
+    "/":  {
+      "total":  "21474836480",
+      "used":  "12332068864"
+    }
+  },
+  "memory":  {
+    "total":  "270296895488"
+  },
+  "gpu_nvidia":  [
+    {
+      "name":  "NVIDIA RTX 2000 Ada Generation",
+      "memoryTotal":  "17175674880",
+      "cudaCores":  2816,
+      "architecture":  "Ada",
+      "uuid":  "GPU-731c509f-35a6-4d40-7004-c420c9e043a8"
+    }
+  ],
+  "cudaVersion":  "12.7",
+  "writerId":  "j7ms6xtvn6vqw5vmq0sswqazsbas9c4o"
+}
