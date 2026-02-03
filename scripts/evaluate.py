@@ -1,5 +1,6 @@
 import sys
 import json
+import warnings
 from pathlib import Path
 
 import typer
@@ -8,8 +9,15 @@ from rich.console import Console
 from rich.table import Table
 from rich.progress import track
 from datasets import load_dataset
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig, logging
+
+logging.set_verbosity_error()
 from peft import PeftModel
+
+warnings.filterwarnings("ignore", message=".*torch_dtype.*")
+warnings.filterwarnings("ignore", message=".*max_length.*")
+warnings.filterwarnings("ignore", message=".*generation_config.*")
+warnings.filterwarnings("ignore", message=".*generation flags.*")
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -58,28 +66,26 @@ def generate_responses(
     questions: list[str],
     eval_config: EvalConfig,
 ) -> list[str]:
-    pipe = pipeline(
-        "text-generation",
-        model=model,
-        tokenizer=tokenizer,
-        torch_dtype=torch.bfloat16,
-        device_map="auto",
+    gen_config = GenerationConfig(
+        max_new_tokens=eval_config.max_new_tokens,
+        do_sample=eval_config.do_sample,
+        temperature=eval_config.temperature if eval_config.do_sample else None,
+        pad_token_id=tokenizer.pad_token_id,
+        eos_token_id=tokenizer.eos_token_id,
     )
 
     responses = []
     for question in track(questions, description="Generating..."):
         prompt = format_prompt(question)
         messages = [{"role": "user", "content": prompt}]
-
-        output = pipe(
-            messages,
-            max_new_tokens=eval_config.max_new_tokens,
-            temperature=eval_config.temperature if eval_config.do_sample else None,
-            do_sample=eval_config.do_sample,
-            pad_token_id=tokenizer.pad_token_id,
-        )
-
-        response = output[0]["generated_text"][-1]["content"]
+        
+        input_text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        inputs = tokenizer(input_text, return_tensors="pt").to(model.device)
+        
+        with torch.no_grad():
+            outputs = model.generate(**inputs, generation_config=gen_config)
+        
+        response = tokenizer.decode(outputs[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True)
         responses.append(response)
 
     return responses
