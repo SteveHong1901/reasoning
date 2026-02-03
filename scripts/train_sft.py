@@ -54,6 +54,7 @@ def main(
     tokenizer = AutoTokenizer.from_pretrained(config.model.name)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.model_max_length = config.model.max_seq_length
 
     quantization_config = None
     if config.model.load_in_4bit:
@@ -107,11 +108,11 @@ def main(
         warmup_steps=config.train.warmup_steps,
         logging_steps=config.train.logging_steps,
         save_steps=config.train.save_steps,
-        max_seq_length=config.model.max_seq_length,
         bf16=torch.cuda.is_available(),
         report_to="wandb" if config.use_wandb else "none",
         run_name=config.name if config.use_wandb else None,
         seed=config.seed,
+        dataset_text_field="text",
     )
 
     trainer = SFTTrainer(
