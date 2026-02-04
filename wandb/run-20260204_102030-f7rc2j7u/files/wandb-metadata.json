@@ -1,0 +1,50 @@
+{
+  "os":  "Linux-6.8.0-59-generic-x86_64-with-glibc2.35",
+  "python":  "CPython 3.11.10",
+  "startedAt":  "2026-02-04T10:20:30.337415Z",
+  "args":  [
+    "--config-path",
+    "configs/dpo_padded_heavy.yaml",
+    "--pairs-path",
+    "data/pairs/dpo_pairs_heavy.json",
+    "--epochs",
+    "5",
+    "--output-dir",
+    "models/dpo-padded-heavy-5ep"
+  ],
+  "program":  "/reasoning/scripts/train_dpo.py",
+  "codePath":  "scripts/train_dpo.py",
+  "codePathLocal":  "scripts/train_dpo.py",
+  "git":  {
+    "remote":  "https://github.com/SteveHong1901/reasoning.git",
+    "commit":  "ed2fa7670cc225d24862c5bb00d6908ff6ef708c"
+  },
+  "email":  "stevehongforwork@gmail.com",
+  "root":  "/reasoning",
+  "host":  "3c967a4eaf3f",
+  "executable":  "/reasoning/.venv/bin/python3",
+  "cpu_count":  64,
+  "cpu_count_logical":  128,
+  "gpu":  "NVIDIA GeForce RTX 4090",
+  "gpu_count":  1,
+  "disk":  {
+    "/":  {
+      "total":  "21474836480",
+      "used":  "11986141184"
+    }
+  },
+  "memory":  {
+    "total":  "540844806144"
+  },
+  "gpu_nvidia":  [
+    {
+      "name":  "NVIDIA GeForce RTX 4090",
+      "memoryTotal":  "25757220864",
+      "cudaCores":  16384,
+      "architecture":  "Ada",
+      "uuid":  "GPU-41d49e4b-c89e-6381-4987-e62c29ac0263"
+    }
+  ],
+  "cudaVersion":  "12.4",
+  "writerId":  "9orgjbqwczlp9y58c8xxjmtvu5wjjepz"
+}
