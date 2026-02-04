@@ -10,11 +10,11 @@ venv/
 dist/
 build/
 
-models/
-results/
-*.pt
-*.bin
-*.safetensors
+# models/
+# results/
+# *.pt
+# *.bin
+# *.safetensors
 
 wandb/
 .wandb/
