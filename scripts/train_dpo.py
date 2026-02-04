@@ -69,6 +69,8 @@ def main(
     pairs_path: Path = typer.Option(Path("data/pairs/dpo_pairs_clean.json"), help="Path to DPO pairs"),
     debug: bool = typer.Option(False, help="Run in debug mode"),
     cpu: bool = typer.Option(False, help="Run in CPU mode (minimal memory)"),
+    epochs: int = typer.Option(None, help="Override number of training epochs"),
+    output_dir: str = typer.Option(None, help="Override output directory"),
 ):
     if cpu:
         config = get_cpu_config()
@@ -81,9 +83,16 @@ def main(
     else:
         config = ExperimentConfig()
 
+    if epochs is not None:
+        config.train.num_train_epochs = epochs
+    if output_dir is not None:
+        config.train.output_dir = output_dir
+
     console.print(f"[bold]Experiment: {config.name}")
     console.print(f"[bold]Model: {config.model.name}")
     console.print(f"[bold]Pairs: {pairs_path}")
+    console.print(f"[bold]Epochs: {config.train.num_train_epochs}")
+    console.print(f"[bold]Output: {config.train.output_dir}")
 
     console.print("\n[bold]Loading model and tokenizer...")
     model, tokenizer = load_model_and_tokenizer(config)

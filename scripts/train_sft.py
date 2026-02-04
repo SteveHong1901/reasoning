@@ -32,6 +32,8 @@ def main(
     config_path: Path = typer.Option(None, help="Path to config YAML"),
     debug: bool = typer.Option(False, help="Run in debug mode"),
     cpu: bool = typer.Option(False, help="Run in CPU mode (minimal memory)"),
+    epochs: int = typer.Option(None, help="Override number of training epochs"),
+    output_dir: str = typer.Option(None, help="Override output directory"),
 ):
     if cpu:
         config = get_cpu_config()
@@ -48,8 +50,15 @@ def main(
         config.train.method = "sft"
         config.train.output_dir = "models/sft-baseline"
 
+    if epochs is not None:
+        config.train.num_train_epochs = epochs
+    if output_dir is not None:
+        config.train.output_dir = output_dir
+
     console.print(f"[bold]Experiment: {config.name}")
     console.print(f"[bold]Model: {config.model.name}")
+    console.print(f"[bold]Epochs: {config.train.num_train_epochs}")
+    console.print(f"[bold]Output: {config.train.output_dir}")
 
     tokenizer = AutoTokenizer.from_pretrained(config.model.name)
     if tokenizer.pad_token is None:

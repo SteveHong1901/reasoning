@@ -30,15 +30,33 @@ def format_prompt(question: str) -> str:
 
 
 def extract_answer(text: str) -> str | None:
-    patterns = [
-        r"####\s*([+-]?\d+(?:,\d{3})*(?:\.\d+)?)",
-        r"answer\s*(?:is|=|:)\s*([+-]?\d+(?:,\d{3})*(?:\.\d+)?)",
-        r"=\s*([+-]?\d+(?:,\d{3})*(?:\.\d+)?)\s*$",
-    ]
-    for pattern in patterns:
-        match = re.search(pattern, text, re.IGNORECASE | re.MULTILINE)
-        if match:
-            return match.group(1).replace(",", "")
+    match = re.search(
+        r"#{4,}\s*\$?\s*([+-]?\d+(?:,\d{3})*(?:\.\d+)?)",
+        text,
+        re.IGNORECASE | re.MULTILINE,
+    )
+    if match:
+        return match.group(1).replace(",", "")
+
+    match = re.search(
+        r"(?:final\s+answer|answer)\s*(?:is|=|:)\s*\$?\s*([+-]?\d+(?:,\d{3})*(?:\.\d+)?)",
+        text,
+        re.IGNORECASE,
+    )
+    if match:
+        return match.group(1).replace(",", "")
+
+    number = r"[+-]?\d+(?:,\d{3})*(?:\.\d+)?"
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+    if lines:
+        tail = lines[-1]
+        matches = list(re.finditer(number, tail))
+        if matches:
+            return matches[-1].group(0).replace(",", "")
+
+    matches = list(re.finditer(number, text))
+    if matches:
+        return matches[-1].group(0).replace(",", "")
     return None
 
 
