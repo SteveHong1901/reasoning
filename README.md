@@ -1,4 +1,4 @@
-# The Reasoning Mirage
+# Investigating Verbosity Issue of Preference Tuning
 
 Investigating length-hacking in Chain-of-Thought post-training.
 
